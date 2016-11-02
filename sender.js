@@ -1,14 +1,15 @@
 const http = require('http');
+const options = require('./options');
 
 module.exports = (values, callback) => {//values in JSON { par1: 'value' }
-  let getQuery = '';
+  let getQuery = `iddev=${options.idDev}&`;
   for(key in values) {
     getQuery += `${key}=${values[key]}&`;
   }
   http.get({
-    hostname: 'localhost',
-    port: 1234,
-    path: '/?' + getQuery,
+    hostname: options.server.host,
+    port: options.server.port,
+    path: options.server.path + '?' + getQuery,
     agent: false
   }, (res) => {
     let error = null;

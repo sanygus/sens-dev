@@ -1,13 +1,20 @@
-const sender = require('./sender.js');
-const sensRead = require('./sensRead.js');
+const sender = require('./sender');
+const hwComm = require('./hwComm');
+const log = require('./log');
 
-sensRead((err, values) => {
-  if(err) { throw err } else {
-    console.log(values);
-  }
+hwComm.sensRead((err, values) => {
+  if (err) { log(err) }
+  sender(values, (err) => {
+    if (err) { 
+      log(err);
+      /*fail*/
+    } else {
+      console.log('okay');
+    }
+  })
 })
-sender({abc: 'def', val: 1.234}, (err) => {
-  if(err) { throw err /*fail*/ } else {
-    console.log('okay');
-  }
-})
+/*hwComm.sigSleep(1, (err, success) => {
+  if (err) { log(err) }
+  console.log(success);
+})*/
+
