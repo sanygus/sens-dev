@@ -3,9 +3,9 @@ const hwComm = require('./hwComm');
 const log = require('./log');
 
 hwComm.sensRead((err, values) => {
-  if (err) { log(err) }
+  if (err) { log(err); }
   sender(values, (err) => {
-    if (err) { 
+    if (err) {
       log(err);
       /*fail*/
     } else {
@@ -17,4 +17,3 @@ hwComm.sensRead((err, values) => {
   if (err) { log(err) }
   console.log(success);
 })*/
-
