@@ -5,5 +5,6 @@ module.exports = {
     host: 'localhost',
     port: 1234,
     path: '/'
-  }
+  },
+  dataKeeperFile: 'tmp.sensors',
 }
