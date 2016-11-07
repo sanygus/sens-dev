@@ -1,5 +1,6 @@
 module.exports = {
   idDev: 'asdw2',
+  sensorsInterval: 10000,
   hwPath: '../sens-dev-hw',
   server: {
     host: 'localhost',
