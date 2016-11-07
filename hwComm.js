@@ -1,7 +1,8 @@
+const { hwPath } = require('./options');
 const exec = require('child_process').exec;
 
 module.exports.sensRead = (callback) => {
-  exec('python test.py', (error, stdout, stderr) => {
+  exec(`python ${hwPath}/ardsens.py`, (error, stdout, stderr) => {
     if (error) {
       return callback(error);
     }
@@ -27,7 +28,7 @@ module.exports.sensRead = (callback) => {
 
 module.exports.sigSleep = (time, callback) => {
   if (time > 0) {
-    exec(`python test1.py ${time}`, (error, stdout, stderr) => {
+    exec(`python ${hwPath}/ardsleep.py ${time}`, (error, stdout, stderr) => {
       if (error) {
         return callback(error);
       }

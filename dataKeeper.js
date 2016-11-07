@@ -7,8 +7,8 @@ module.exports.add = (obj, callback) => {
 
 module.exports.get = (callback) => {
   fs.readFile(fileName, 'utf8', (err, data) => {
-    if ((err) || !(data.indexOf('{') < data.indexOf('}'))) {
-      callback(err || new Error('no objects in file'))
+    if (err || !(data.indexOf('{') < data.indexOf('}'))) {
+      callback(err || new Error('no objects in file'));
     } else {
       callback(null, JSON.parse(data.substring(data.lastIndexOf('\n', data.length - 2), data.length - 1)));
     }
