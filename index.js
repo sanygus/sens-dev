@@ -10,11 +10,12 @@ powerManger.init();
 setInterval(() => {
   hwComm.sensRead((err, values) => {
     if (err) { log(err); }
-    if (values && (values.volt)) {
-      powerManger.addVolt(values.volt); 
-      delete(values.volt);
+    if (values) {
+      if (values.volt) {
+        powerManger.addVolt(values.volt);
+      }
+      sender(values);
     }
-    sender(values);
   });
 }, sensorsInterval);
 
