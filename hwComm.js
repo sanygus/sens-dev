@@ -22,6 +22,7 @@ module.exports.sensRead = (callback) => {
         delete sensors.error2;
       }
     }
+    sensors.date = (new Date).toISOString();
     callback(sensErr, sensors);
   });
 }

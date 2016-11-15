@@ -5,7 +5,7 @@ module.exports = {
   server: {
     host: 'localhost',
     port: 1234,
-    path: '/'
+    path: '/dev'
   },
   dataKeeperFile: 'tmpsensors.db',
   powerManagerFile: 'volts.db',

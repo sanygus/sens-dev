@@ -19,7 +19,7 @@ const sendToServer = (values, callback) => {//values in JSON { par1: 'value' }
     }, (res) => {
       let error = null;
       res.on('data', (data) => {
-        if(res.statusCode !== 200 || JSON.parse(data).status !== 'ok') {
+        if(res.statusCode !== 202 || JSON.parse(data).status !== 'ok') {
           error = new Error('err in answ');
         }
       });
