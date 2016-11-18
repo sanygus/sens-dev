@@ -28,5 +28,5 @@ module.exports.addVolt = (volt) => {
 
 const analysisDecide = () => {
   //anlysis volts []
-  console.log(volts);
+  //console.log(volts);
 }
