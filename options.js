@@ -9,4 +9,9 @@ module.exports = {
   },
   dataKeeperFile: 'tmpsensors.db',
   powerManagerFile: 'volts.db',
+  power: {
+    cycleTime: 2 * 60 * 1000,
+    maxCharge: 1023,
+    minCharge: 856,
+  }
 }

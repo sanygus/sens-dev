@@ -5,8 +5,6 @@ const powerManger = require('./powerManager');
 const log = require('./log');
 const { sensorsInterval } = require('./options');
 
-powerManger.init();
-
 setInterval(() => {
   hwComm.sensRead((err, values) => {
     if (err) { log(err); }
