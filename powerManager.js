@@ -31,9 +31,10 @@ const analysisDecide = () => {
   } else {
     if (workingTime >= powerOptions.cycleTime * lastCharge) {
       hwComm.shutdown(powerOptions.cycleTime * (1 - lastCharge));
-    }/* else {
-      console.log('work next ' + workingTime);
-    }*/
+    } else {
+      // working
+      // console.log('work next ' + workingTime);
+    }
   }
 }
 

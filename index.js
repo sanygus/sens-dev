@@ -9,7 +9,7 @@ setInterval(() => {
   hwComm.sensRead((err, values) => {
     if (err) { log(err); }
     if (values) {
-      if (values.volt) {
+      if (values.volt !== undefined) {
         powerManger.addVolt(values.volt);
       }
       sender(values);
