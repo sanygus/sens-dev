@@ -24,23 +24,28 @@ const init = () => {
 }
 
 const analysisDecide = () => {
-  //anlysis volts []
   const workingTime = (new Date()) - startDate; // ms
   const lastCharge = voltToCharge(volts[volts.length - 1]);
   if (lastCharge > 0.95) {
-    
+    // working
   } else {
     if (workingTime >= powerOptions.cycleTime * lastCharge) {
       hwComm.shutdown(powerOptions.cycleTime * (1 - lastCharge));
-    } else {
+    }/* else {
       console.log('work next ' + workingTime);
-    }
+    }*/
   }
 }
 
 const voltToCharge = (volt) => {
   let charge = 0;
-  if (volt > powerOptions.maxCharge) {
+  if (volt === undefined) {
+    charge = 1;
+    log('no statistics about volts');
+  } else if (volt === 0) {
+    charge = 1;
+    log('volt no connected!'); // WARN
+  } else if (volt > powerOptions.maxCharge) {
     charge = 1;
     log('outside charge interval >');
   } else if (volt < powerOptions.minCharge) {
@@ -49,13 +54,16 @@ const voltToCharge = (volt) => {
   } else {
     charge = (volt - powerOptions.minCharge) / (powerOptions.maxCharge - powerOptions.minCharge);
   }
+  console.log(volt, charge);
   return charge;
 }
 
 module.exports.addVolt = (volt) => {
-  volts.push(volt);
-  fs.writeFile(fileName, JSON.stringify(volts), log);
-  analysisDecide();
+  if (volt !== undefined) {
+    volts.push(volt);
+    fs.writeFile(fileName, JSON.stringify(volts), log);
+  }
+  //analysisDecide();
 }
 
 init();
