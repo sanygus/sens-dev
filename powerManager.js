@@ -31,10 +31,10 @@ const analysisDecide = () => {
   } else {
     if (workingTime >= powerOptions.cycleTime * lastCharge) {
       hwComm.shutdown(powerOptions.cycleTime * (1 - lastCharge));
-    } else {
+    }/* else {
       // working
       // console.log('work next ' + workingTime);
-    }
+    }*/
   }
 }
 
@@ -55,7 +55,6 @@ const voltToCharge = (volt) => {
   } else {
     charge = (volt - powerOptions.minCharge) / (powerOptions.maxCharge - powerOptions.minCharge);
   }
-  console.log(volt, charge);
   return charge;
 }
 
