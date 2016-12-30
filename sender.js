@@ -6,15 +6,19 @@ const log = require('./log');
 const sendToServer = (values, callback) => {//values in JSON { par1: 'value' }
   let getQuery = `iddev=${options.idDev}&`;
   let isValues = false;
+  let srvPath = options.server.path;
   for(key in values) {
     getQuery += `${key}=${values[key]}&`;
     isValues = true;
+    if (key === "type" && values[key] === "info") {
+      srvPath = "/log";
+    }
   }
   if (isValues) {
     http.get({
       hostname: options.server.host,
       port: options.server.port,
-      path: options.server.path + '?' + getQuery,
+      path: srvPath + '?' + getQuery,
       agent: false
     }, (res) => {
       let error = null;

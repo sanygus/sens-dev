@@ -2,28 +2,24 @@ const { powerManagerFile: fileName, power: powerOptions } = require('./options')
 const hwComm = require('./hwComm');
 const log = require('./log');
 const fs = require('fs');
-const volts = [];
-const startDate = new Date();
+let powerParams = {};
+let currentVolt = null;
+let startVolt = null;
+let startMeasure = true;
+//const startDate = new Date();
 
 const init = () => {
   fs.readFile(fileName, (err, data) => {
     if (err) {
-      if (err.code !== "ENOENT") {
-        log(err);
-      }
+      throw err;
     } else {
-      const voltsFromFile = JSON.parse(data);
-      if (Array.isArray(voltsFromFile)) {
-        volts.unshift(...voltsFromFile);
-      } else {
-        log(new Error('no array in file ' + fileName));
-      }
+      powerParams = JSON.parse(data);
     }
   })
-  setInterval(analysisDecide, 10000);
+  //setInterval(analysisDecide, 10000);
 }
 
-const analysisDecide = () => {
+/*const analysisDecide = () => {
   const workingTime = (new Date()) - startDate; // ms
   const lastCharge = voltToCharge(volts[volts.length - 1]);
   if (lastCharge > 0.95) {
@@ -31,12 +27,9 @@ const analysisDecide = () => {
   } else {
     if (workingTime >= powerOptions.cycleTime * lastCharge) {
       hwComm.shutdown(powerOptions.cycleTime * (1 - lastCharge));
-    }/* else {
-      // working
-      // console.log('work next ' + workingTime);
-    }*/
+    }
   }
-}
+}*/
 
 const voltToCharge = (volt) => {
   let charge = 0;
@@ -60,10 +53,32 @@ const voltToCharge = (volt) => {
 
 module.exports.addVolt = (volt) => {
   if (volt !== undefined) {
-    volts.push(volt);
-    fs.writeFile(fileName, JSON.stringify(volts), log);
+    if (startMeasure) {
+      startVolt = volt;
+      startMeasure = false;
+      setTimeout(() => {
+        final();
+      }, powerOptions.workTime);
+    } else {
+      currentVolt = volt;
+    }
+    /*if (endMeasure) {
+      voltEnd = volt;
+      fs.writeFile(fileName, JSON.stringify({voltLastEnd: voltEnd}), log);
+      endMeasure = false;
+    }*/
+    //volts.push(volt);
+    //fs.writeFile(fileName, JSON.stringify(volts), log);
   }
-  //analysisDecide();
+}
+
+const final = () => {
+  if (startVolt > currentVolt) {//доработать
+    powerParams.costQuant = voltToCharge(startVolt) - voltToCharge(currentVolt);
+    fs.writeFile(fileName, JSON.stringify(powerParams), log);
+  }
+  currentSleepTime = (powerParams.lifeAllTime * powerParams.costQuant) / voltToCharge(currentVolt);
+  hwComm.shutdown(currentSleepTime * 60000);
 }
 
 init();

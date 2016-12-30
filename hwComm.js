@@ -1,6 +1,7 @@
 const { hwPath } = require('./options');
 const exec = require('child_process').exec;
 const log = require('./log');
+const sender = require('./sender');
 
 module.exports.sensRead = (callback) => {
   exec(`python ${hwPath}/ardsens.py`, (error, stdout, stderr) => {
@@ -46,23 +47,26 @@ const sigSleep = (time, callback) => {
 
 module.exports.shutdown = (timems) => {
   const sleepTime = Math.round(timems / (60 * 1000)); // ms to mins
-  if (sleepTime > 0) {
-    //log to server about sleep time
-    sigSleep(sleepTime, (err, success) => {
-      if (err) { log(err); } else {
-        if (success) {
-          exec('sudo shutdown -h now', (error, stdout, stderr) => {
-            if (error || stderr) {
-              log('error in shutdown, but ardsleep success'); // !WARN
-              log(error || stderr);
-            }
-          });
-        } else {
-          log('ardsleep fail'); // !WARN
+  sender({ "type": "info", "sleepTime": sleepTime, "date": (new Date).toISOString() });
+  setTimeout(() => {
+    if (sleepTime > 0 && false) {
+      //log to server about sleep time
+      sigSleep(sleepTime, (err, success) => {
+        if (err) { log(err); } else {
+          if (success) {
+            exec('sudo shutdown -h now', (error, stdout, stderr) => {
+              if (error || stderr) {
+                log('error in shutdown, but ardsleep success'); // !WARN
+                log(error || stderr);
+              }
+            });
+          } else {
+            log('ardsleep fail'); // !WARN
+          }
         }
-      }
-    });
-  } else {
-    log('sleepTime is ' + sleepTime + ', timems: ' + timems);
-  }
+      });
+    } else {
+      log('sleepTime is ' + sleepTime + ', timems: ' + timems);
+    }
+  }, 10000);
 }

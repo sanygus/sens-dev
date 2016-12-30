@@ -8,9 +8,9 @@ module.exports = {
     path: '/dev'
   },
   dataKeeperFile: 'tmpsensors.db',
-  powerManagerFile: 'volts.db',
+  powerManagerFile: 'powerParams.dat',
   power: {
-    cycleTime: 2 * 60 * 1000,
+    workTime: 1 * 60000,
     maxCharge: 1023,
     minCharge: 856,
   }
