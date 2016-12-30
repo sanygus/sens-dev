@@ -49,7 +49,7 @@ module.exports.shutdown = (timems) => {
   const sleepTime = Math.round(timems / (60 * 1000)); // ms to mins
   sender({ "type": "info", "sleepTime": sleepTime, "date": (new Date).toISOString() });
   setTimeout(() => {
-    if (sleepTime > 0 && false) {
+    if (sleepTime > 0) {
       //log to server about sleep time
       sigSleep(sleepTime, (err, success) => {
         if (err) { log(err); } else {
