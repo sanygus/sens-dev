@@ -1,5 +1,6 @@
 const { powerManagerFile: fileName, power: powerOptions } = require('./options');
 const hwComm = require('./hwComm');
+const sender = require('./sender');
 const log = require('./log');
 const fs = require('fs');
 let powerParams = {};
@@ -51,6 +52,20 @@ const voltToCharge = (volt) => {
   return charge;
 }
 
+const final = () => {
+  if (startVolt > currentVolt) {//доработать
+    powerParams.costQuant = voltToCharge(startVolt) - voltToCharge(currentVolt);
+    fs.writeFile(fileName, JSON.stringify(powerParams), log);
+  }
+  currentSleepTime = Math.round((powerParams.lifeAllTime * powerParams.costQuant) / voltToCharge(currentVolt));
+  sender({ "type": "info", "event": "sleep", "time": currentSleepTime, "cost": powerParams.costQuant, "date": (new Date).toISOString() });
+  setTimeout(() => {
+    hwComm.shutdown(currentSleepTime);
+  }, 5000);
+}
+
+init();
+
 module.exports.addVolt = (volt) => {
   if (volt !== undefined) {
     if (startMeasure) {
@@ -72,13 +87,4 @@ module.exports.addVolt = (volt) => {
   }
 }
 
-const final = () => {
-  if (startVolt > currentVolt) {//доработать
-    powerParams.costQuant = voltToCharge(startVolt) - voltToCharge(currentVolt);
-    fs.writeFile(fileName, JSON.stringify(powerParams), log);
-  }
-  currentSleepTime = (powerParams.lifeAllTime * powerParams.costQuant) / voltToCharge(currentVolt);
-  hwComm.shutdown(currentSleepTime * 60000);
-}
-
-init();
+module.exports.voltToCharge = voltToCharge;

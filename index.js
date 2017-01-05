@@ -11,6 +11,7 @@ setInterval(() => {
     if (values) {
       if (values.volt !== undefined) {
         powerManger.addVolt(values.volt);
+        values.charge = powerManger.voltToCharge(values.volt);
       }
       sender(values);
     }
