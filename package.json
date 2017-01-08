@@ -15,5 +15,7 @@
   "bugs": {
     "url": "https://github.com/sanygus/sens-dev/issues"
   },
-  "homepage": "https://github.com/sanygus/sens-dev#readme"
+  "homepage": "https://github.com/sanygus/sens-dev#readme",
+  "dependencies": {
+  }
 }

@@ -57,11 +57,21 @@ const final = () => {
     powerParams.costQuant = voltToCharge(startVolt) - voltToCharge(currentVolt);
     fs.writeFile(fileName, JSON.stringify(powerParams), log);
   }
-  currentSleepTime = Math.round((powerParams.lifeAllTime * powerParams.costQuant) / voltToCharge(currentVolt));
-  sender({ "type": "info", "event": "sleep", "time": currentSleepTime, "cost": powerParams.costQuant, "date": (new Date).toISOString() });
-  setTimeout(() => {
-    hwComm.shutdown(currentSleepTime);
-  }, 5000);
+  const lifeAllTime = (new Date(powerParams.lifeToTime) - new Date()) / 60000;
+  if(lifeAllTime > 0) {
+    currentSleepTime = Math.round((lifeAllTime * powerParams.costQuant) / voltToCharge(currentVolt));
+    if (currentSleepTime > 1) {
+      sender({ "type": "info", "event": "sleep", "time": currentSleepTime, "cost": powerParams.costQuant, "date": (new Date).toISOString() });
+      setTimeout(() => {
+        hwComm.shutdown(currentSleepTime);
+      }, 5000);
+    } else {
+      sender({ "type": "info", "event": "notice", "message": "sleep time small, no sleep", "lifeAllTime": lifeAllTime, "date": (new Date).toISOString() });
+      startMeasure = true;
+    }
+  } else {
+    sender({ "type": "info", "event": "warn", "message": "life to time gone", "lifeToTime": powerParams.lifeToTime, "date": (new Date).toISOString() });
+  }
 }
 
 init();

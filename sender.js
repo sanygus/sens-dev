@@ -8,7 +8,7 @@ const sendToServer = (values, callback) => {//values in JSON { par1: 'value' }
   let isValues = false;
   let srvPath = options.server.path;
   for(key in values) {
-    getQuery += `${key}=${values[key]}&`;
+    getQuery += `${encodeURI(key)}=${encodeURI(values[key])}&`;
     isValues = true;
     if (key === "type" && values[key] === "info") {
       srvPath = "/log";

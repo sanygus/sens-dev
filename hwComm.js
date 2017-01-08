@@ -1,5 +1,6 @@
 const { hwPath } = require('./options');
 const exec = require('child_process').exec;
+const sender = require('./sender');
 const log = require('./log');
 
 module.exports.sensRead = (callback) => {
@@ -58,6 +59,7 @@ module.exports.shutdown = (sleepMin) => {
           });
         } else {
           log('ardsleep fail'); // !WARN
+          sender({ "type": "info", "event": "warn", "message": "ardsleep fail", "date": (new Date).toISOString() });
         }
       }
     });
