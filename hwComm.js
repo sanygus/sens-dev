@@ -14,6 +14,7 @@ module.exports.sensRead = (callback) => {
     const sensors = JSON.parse(stdout);
     let sensErr = null;
     if (sensors.error1 || sensors.error2) {
+      sender({ "type": "info", "event": "warn", "message": "sensRead fail", "date": (new Date).toISOString() });
       sensErr = {};
       if (sensors.error1) {
         sensErr.error1 = sensors.error1;

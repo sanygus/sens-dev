@@ -1,6 +1,6 @@
 module.exports = {
   idDev: 'asdw2',
-  sensorsInterval: 10000,
+  sensorsInterval: 25000,
   hwPath: '../sens-dev-hw',
   server: {
     host: 'localhost',
@@ -10,7 +10,7 @@ module.exports = {
   dataKeeperFile: 'tmpsensors.db',
   powerManagerFile: 'powerParams.dat',
   power: {
-    workTime: 1 * 60000,
+    workTime: 3 * 60000,
     maxCharge: 1023,
     minCharge: 856,
   }
