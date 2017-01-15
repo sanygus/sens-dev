@@ -19,8 +19,8 @@ setInterval(() => {
 }, sensorsInterval);
 
 setTimeout(() => {
-  sender({ "type": "info", "event": "wakeup", "date": (new Date).toISOString() });
-}, 30000);
+  sender({ "type": "info", "event": "wakeup", "date": new Date((new Date).valueOf() - 15000).toISOString() });
+}, 15000);
 
 /*hwComm.sigSleep(1, (err, success) => {
   if (err) { log(err) }

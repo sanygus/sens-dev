@@ -61,7 +61,7 @@ const final = () => {
   if(lifeAllTime > 0) {
     currentSleepTime = Math.round((lifeAllTime * powerParams.costQuant) / voltToCharge(currentVolt));
     if (currentSleepTime > 1) {
-      sender({ "type": "info", "event": "sleep", "time": currentSleepTime, "cost": powerParams.costQuant, "date": (new Date).toISOString() });
+      sender({ "type": "info", "event": "sleep", "time": currentSleepTime, "cost": powerParams.costQuant.toFixed(4), "date": (new Date).toISOString() });
       setTimeout(() => {
         hwComm.shutdown(currentSleepTime);
       }, 5000);
