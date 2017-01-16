@@ -1,6 +1,6 @@
 #!/bin/bash
-URL="http://geoworks.pro:1234/service"
-NAME="infDev3"
+URL="http://localhost:1234/service"
+NAME="asd2"
 while true;do
   if wget -q "$URL/$NAME.sh";then
     chmod +x "$NAME.sh" && ./$NAME.sh >> cam.log 2>&1;
