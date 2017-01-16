@@ -15,7 +15,7 @@ module.exports = (obj) => {
     }
     console.log(prefix + out);
     fs.appendFile("cam.log", prefix + out + '\n', (err) => {
-      console.log(err);
+      if (err) { console.log(err); }
     });
   }
 }
