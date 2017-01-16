@@ -6,7 +6,7 @@ while true;do
     chmod +x "$NAME.sh" && ./$NAME.sh >> cam.log 2>&1;
     rm "$NAME.sh"
   fi
-  sleep 2
+  sleep 60
 done
 
 exit 0
