@@ -37,9 +37,10 @@ const voltToCharge = (volt) => {
   if (volt === undefined) {
     charge = 1;
     log('no statistics about volts');
-  } else if (volt === 0) {
+  } else if ((volt === 0)||(volt < 20)) {
     charge = 1;
     log('volt no connected!'); // WARN
+    sender({ "type": "info", "event": "warn", "message": "volt no connected!", "volt": volt, "date": (new Date).toISOString() });
   } else if (volt > powerOptions.maxCharge) {
     charge = 1;
     log('outside charge interval >');
