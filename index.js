@@ -16,6 +16,9 @@ setInterval(() => {
       sender(values);
     }
   });
+  setTimeout(() => {
+    hwComm.shotAndSendPhoto();
+  }, 5000);
 }, sensorsInterval);
 
 setTimeout(() => {

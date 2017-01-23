@@ -13,5 +13,7 @@ module.exports = {
     workTime: 3 * 60000,
     maxCharge: 1023,
     minCharge: 856,
+    workHoursStart: 9,
+    workHoursEnd: 17,
   }
 }

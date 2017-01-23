@@ -1,4 +1,4 @@
-const { hwPath } = require('./options');
+const { hwPath, idDev } = require('./options');
 const exec = require('child_process').exec;
 const sender = require('./sender');
 const log = require('./log');
@@ -67,4 +67,8 @@ module.exports.shutdown = (sleepMin) => {
   } else {
     log('sleepTime is ' + sleepTime);
   }
+}
+
+module.exports.shotAndSendPhoto = () => {
+  exec(`raspistill -o /tmpvid/cam/${idDev}.jpg && scp /tmpvid/cam/${idDev}.jpg pi@geoworks.pro:/home/pi/camphotos/;rm /tmpvid/cam/${idDev}.jpg`);
 }

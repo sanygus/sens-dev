@@ -7,7 +7,6 @@ let powerParams = {};
 let currentVolt = null;
 let startVolt = null;
 let startMeasure = true;
-//const startDate = new Date();
 
 const init = () => {
   fs.readFile(fileName, (err, data) => {
@@ -17,20 +16,7 @@ const init = () => {
       powerParams = JSON.parse(data);
     }
   })
-  //setInterval(analysisDecide, 10000);
 }
-
-/*const analysisDecide = () => {
-  const workingTime = (new Date()) - startDate; // ms
-  const lastCharge = voltToCharge(volts[volts.length - 1]);
-  if (lastCharge > 0.95) {
-    // working
-  } else {
-    if (workingTime >= powerOptions.cycleTime * lastCharge) {
-      hwComm.shutdown(powerOptions.cycleTime * (1 - lastCharge));
-    }
-  }
-}*/
 
 const voltToCharge = (volt) => {
   let charge = 0;
@@ -56,13 +42,34 @@ const voltToCharge = (volt) => {
 const final = () => {
   if (startVolt > currentVolt) {//доработать
     powerParams.costQuant = voltToCharge(startVolt) - voltToCharge(currentVolt);
-    fs.writeFile(fileName, JSON.stringify(powerParams), log);
+  } else {
+    powerParams.costQuant = 0.01;
   }
+  fs.writeFile(fileName, JSON.stringify(powerParams), log);
   const lifeAllTime = (new Date(powerParams.lifeToTime) - new Date()) / 60000;
   if(lifeAllTime > 0) {
     currentSleepTime = Math.round((lifeAllTime * powerParams.costQuant) / voltToCharge(currentVolt));
     if (currentSleepTime > 1) {
-      sender({ "type": "info", "event": "sleep", "time": currentSleepTime, "cost": powerParams.costQuant.toFixed(4), "date": (new Date).toISOString() });
+      let wakeUpTime = new Date(new Date().valueOf() + currentSleepTime * 60000);
+      const initTimeSleep = new Date(wakeUpTime.valueOf());
+      if (wakeUpTime.getHours() < powerOptions.workHoursStart) {
+        wakeUpTime.setHours(powerOptions.workHoursStart);
+        wakeUpTime.setMinutes(0);
+        wakeUpTime.setSeconds(0);
+        wakeUpTime.setTime(wakeUpTime.getTime() - 10000);
+        currentSleepTime =  Math.round((wakeUpTime - new Date()) / 60000);
+      } else if (wakeUpTime.getHours() >= powerOptions.workHoursEnd) {
+        wakeUpTime.setHours(powerOptions.workHoursEnd);
+        wakeUpTime.setMinutes(0);
+        wakeUpTime.setSeconds(0);
+        if (wakeUpTime <= new Date(new Date().valueOf() + 420000)) {
+          wakeUpTime.setDate(wakeUpTime.getDate() + 1);
+          wakeUpTime.setHours(powerOptions.workHoursStart);
+        }
+        wakeUpTime.setTime(wakeUpTime.getTime() - 300000);
+        currentSleepTime = Math.round((wakeUpTime - new Date()) / 60000);
+      }
+      sender({ "type": "info", "event": "sleep", "time": currentSleepTime, initTimeSleep, "cost": powerParams.costQuant.toFixed(4), "date": (new Date).toISOString() });
       setTimeout(() => {
         hwComm.shutdown(currentSleepTime);
       }, 5000);
@@ -88,13 +95,6 @@ module.exports.addVolt = (volt) => {
     } else {
       currentVolt = volt;
     }
-    /*if (endMeasure) {
-      voltEnd = volt;
-      fs.writeFile(fileName, JSON.stringify({voltLastEnd: voltEnd}), log);
-      endMeasure = false;
-    }*/
-    //volts.push(volt);
-    //fs.writeFile(fileName, JSON.stringify(volts), log);
   }
 }
 
