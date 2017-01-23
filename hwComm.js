@@ -83,10 +83,12 @@ module.exports.shutdown = shutdown;
 
 
 module.exports.shotAndSendPhoto = () => {
-  if (!noShot) {
+  if (!noShot && !noSleep) {
     noSleep = true;
     exec(`raspistill -o /tmpvid/cam/${idDev}.jpg && scp /tmpvid/cam/${idDev}.jpg pi@geoworks.pro:/home/pi/camphotos/;rm /tmpvid/cam/${idDev}.jpg`, () => {
-      noSleep = false;
+      setTimeout(() => {
+        noSleep = false;
+      }, 3000);
     });
   }
 }
