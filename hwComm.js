@@ -3,6 +3,9 @@ const exec = require('child_process').exec;
 const sender = require('./sender');
 const log = require('./log');
 
+let noSleep = false;
+let noShot = false;
+
 module.exports.sensRead = (callback) => {
   exec(`python3 ${hwPath}/ardsens.py`, (error, stdout, stderr) => {
     if (error) {
@@ -46,29 +49,44 @@ const sigSleep = (time, callback) => {
   }
 }
 
-module.exports.shutdown = (sleepMin) => {
+const shutdown = (sleepMin) => {
   const sleepTime = Math.round(sleepMin);
   if (sleepTime > 0) {
-    sigSleep(sleepTime, (err, success) => {
-      if (err) { log(err); } else {
-        if (success) {
-          exec('sudo shutdown -h now', (error, stdout, stderr) => {
-            if (error || stderr) {
-              log('error in shutdown, but ardsleep success'); // !WARN
-              log(error || stderr);
-            }
-          });
-        } else {
-          log('ardsleep fail'); // !WARN
-          sender({ "type": "info", "event": "warn", "message": "ardsleep fail", "date": (new Date).toISOString() });
+    if (noSleep) {
+      setTimeout(()=> {
+        shutdown(sleepMin);
+      }, 5000);
+    } else {
+      noShot = true;
+      sigSleep(sleepTime, (err, success) => {
+        if (err) { log(err); } else {
+          if (success) {
+            exec('sudo shutdown -h now', (error, stdout, stderr) => {
+              if (error || stderr) {
+                log('error in shutdown, but ardsleep success'); // !WARN
+                log(error || stderr);
+              }
+            });
+          } else {
+            log('ardsleep fail'); // !WARN
+            sender({ "type": "info", "event": "warn", "message": "ardsleep fail", "date": (new Date).toISOString() });
+          }
         }
-      }
-    });
+      });
+    }
   } else {
     log('sleepTime is ' + sleepTime);
   }
 }
 
+module.exports.shutdown = shutdown;
+
+
 module.exports.shotAndSendPhoto = () => {
-  exec(`raspistill -o /tmpvid/cam/${idDev}.jpg && scp /tmpvid/cam/${idDev}.jpg pi@geoworks.pro:/home/pi/camphotos/;rm /tmpvid/cam/${idDev}.jpg`);
+  if (!noShot) {
+    noSleep = true;
+    exec(`raspistill -o /tmpvid/cam/${idDev}.jpg && scp /tmpvid/cam/${idDev}.jpg pi@geoworks.pro:/home/pi/camphotos/;rm /tmpvid/cam/${idDev}.jpg`, () => {
+      noSleep = false;
+    });
+  }
 }
