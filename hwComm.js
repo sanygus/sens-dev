@@ -85,7 +85,7 @@ module.exports.shutdown = shutdown;
 module.exports.shotAndSendPhoto = () => {
   if (!noShot) {
     noSleep = true;
-    exec(`raspistill -o /tmpvid/cam/${idDev}.jpg && scp /tmpvid/cam/${idDev}.jpg pi@geoworks.pro:/home/pi/camphotos/;rm /tmpvid/cam/${idDev}.jpg`, () => {
+    exec(`raspistill -o /tmpvid/cam/${idDev}.jpg && ssh pi@geoworks.pro 'rm /home/pi/camphotos/${idDev}.jpg' && scp /tmpvid/cam/${idDev}.jpg pi@geoworks.pro:/home/pi/camphotos/;rm /tmpvid/cam/${idDev}.jpg`, () => {
       noSleep = false;
     });
   }
