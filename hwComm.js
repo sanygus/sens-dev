@@ -52,12 +52,12 @@ const sigSleep = (time, callback) => {
 const shutdown = (sleepMin) => {
   const sleepTime = Math.round(sleepMin);
   if (sleepTime > 0) {
+    noShot = true;
     if (noSleep) {
       setTimeout(()=> {
         shutdown(sleepMin);
       }, 5000);
     } else {
-      noShot = true;
       sigSleep(sleepTime, (err, success) => {
         if (err) { log(err); } else {
           if (success) {
