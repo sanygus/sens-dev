@@ -81,7 +81,6 @@ const shutdown = (sleepMin) => {
 
 module.exports.shutdown = shutdown;
 
-
 module.exports.shotAndSendPhoto = () => {
   if (!noShot && !noSleep) {
     noSleep = true;
