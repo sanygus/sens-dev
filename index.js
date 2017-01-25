@@ -24,8 +24,3 @@ setInterval(() => {
 setTimeout(() => {
   sender({ "type": "info", "event": "wakeup", "date": new Date((new Date).valueOf() - 5000).toISOString() });
 }, 5000);
-
-/*hwComm.sigSleep(1, (err, success) => {
-  if (err) { log(err) }
-  console.log(success);
-})*/
