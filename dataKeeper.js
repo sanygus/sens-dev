@@ -6,11 +6,20 @@ module.exports.add = (obj, callback) => {
 }
 
 module.exports.get = (callback) => {
-  fs.readFile(fileName, 'utf8', (err, data) => {
+  fs.readFile(fileName, 'utf8', (err, data) => {//rewrite!
     if (err || !(data.indexOf('{') < data.indexOf('}'))) {
-      callback(err || new Error('no objects in file'));
+      if (!err) { fs.unlink(fileName); }
+      callback(err || new Error('file in broken 1, deleting'));
     } else {
-      callback(null, JSON.parse(data.substring(data.lastIndexOf('\n', data.length - 2), data.length - 1)));
+      let returnErr = null;
+      let returnObj = null;
+      try {
+        returnObj = JSON.parse(data.substring(data.lastIndexOf('\n', data.length - 2), data.length - 1));
+      } catch (e) {
+        returnErr = new Error('file is broken 2, deleting');
+        fs.unlink(fileName);
+      }
+      callback(returnErr, returnObj);
     }
   });
 }
