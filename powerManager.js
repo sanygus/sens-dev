@@ -43,7 +43,7 @@ const final = () => {
   if (startVolt > currentVolt) {//доработать
     powerParams.costQuant = voltToCharge(startVolt) - voltToCharge(currentVolt);
   } else {
-    powerParams.costQuant = 0.01;
+    powerParams.costQuant = 0.005;
   }
   fs.writeFile(fileName, JSON.stringify(powerParams), log);
   const lifeAllTime = (new Date(powerParams.lifeToTime) - new Date()) / 60000;
