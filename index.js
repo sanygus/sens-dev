@@ -22,5 +22,5 @@ setInterval(() => {
 }, sensorsInterval);
 
 setTimeout(() => {
-  sender({ "type": "info", "event": "wakeup", "date": new Date((new Date).valueOf() - 5000).toISOString() });
-}, 5000);
+  sender({ "type": "info", "event": "wakeup", "date": new Date((new Date).valueOf() - 15000).toISOString() });
+}, 15000);
