@@ -16,11 +16,19 @@ module.exports.sensRead = (callback) => {
     }
     const sensors = JSON.parse(stdout);
     let sensErr = null;
-    if (sensors.error) {
-      sender({ "type": "info", "event": "warn", "message": "sensRead fail", "date": (new Date).toISOString() });
-      sensErr = sensors.error;
-      delete sensors.error;
-    } else {
+    if (sensors.error1 || sensors.error2) {
+      if (sensors.error1) {
+        sensErr.error1 = sensors.error1;
+        delete sensors.error1;
+        sender({ "type": "info", "event": "warn", "message": "sensRead fail", "typeSens": 1, "date": (new Date).toISOString() });
+      }
+      if (sensors.error2) {
+        sensErr.error2 = sensors.error2;
+        delete sensors.error2;
+        sender({ "type": "info", "event": "warn", "message": "sensRead fail", "typeSens": 2, "date": (new Date).toISOString() });
+      }
+    }
+    if (sensors.volt || sensors.mic) {
       sensors.date = (new Date).toISOString();
     }
     callback(sensErr, sensors);
