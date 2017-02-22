@@ -72,6 +72,9 @@ const shutdown = (sleepMin) => {
           } else {
             log('ardsleep fail'); // !WARN
             sender({ "type": "info", "event": "warn", "message": "ardsleep fail", "date": (new Date).toISOString() });
+            setTimeout(()=> {
+              shutdown(sleepMin);
+            }, 5000);
           }
         }
       });
