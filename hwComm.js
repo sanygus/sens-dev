@@ -7,7 +7,7 @@ let noSleep = false;
 let noShot = false;
 
 module.exports.sensRead = (callback) => {
-  exec(`python3 ${hwPath}/ardsens.py`, (error, stdout, stderr) => {
+  exec(`python3 ${hwPath}/ardsens_i2c.py`, (error, stdout, stderr) => {
     if (error) {
       return callback(error);
     }
@@ -37,7 +37,7 @@ module.exports.sensRead = (callback) => {
 
 const sigSleep = (time, callback) => {
   if (time > 0) {
-    exec(`python3 ${hwPath}/ardsleep.py ${time}`, (error, stdout, stderr) => {
+    exec(`python3 ${hwPath}/ardsleep_i2c.py ${time}`, (error, stdout, stderr) => {
       if (error) {
         return callback(error);
       }
