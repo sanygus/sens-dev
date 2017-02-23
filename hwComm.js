@@ -17,6 +17,7 @@ module.exports.sensRead = (callback) => {
     const sensors = JSON.parse(stdout);
     let sensErr = null;
     if (sensors.error1 || sensors.error2) {
+      sensErr = {};
       if (sensors.error1) {
         sensErr.error1 = sensors.error1;
         delete sensors.error1;
