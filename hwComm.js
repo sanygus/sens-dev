@@ -95,3 +95,18 @@ module.exports.shotAndSendPhoto = () => {
     });
   }
 }
+
+module.exports.startStream = () => {
+  if (!noShot && !noSleep) {
+    noSleep = true;
+    exec(`uv4l -nopreview --auto-video_nr --driver raspicam --encoding mjpeg --width 640 --height 480 --framerate 5`);
+  }
+}
+
+module.exports.stopStream = () => {
+  if (noSleep) {
+    exec(`sudo pkill uv4l`, () => {
+      noSleep = false;
+    });
+  }
+}
