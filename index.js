@@ -21,6 +21,8 @@ setInterval(() => {
   }, 5000);
 }, sensorsInterval);
 
+hwComm.startStream();
+
 setTimeout(() => {
   sender({ "type": "info", "event": "wakeup", "date": new Date((new Date).valueOf() - 25000).toISOString() });
 }, 25000);
