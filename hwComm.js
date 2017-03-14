@@ -5,7 +5,6 @@ const log = require('./log');
 
 let noSleep = false;
 let noShot = false;
-let videoStream = false;
 
 module.exports.sensRead = (callback) => {
   exec(`python3 ${hwPath}/ardsens.py`, (error, stdout, stderr) => {
@@ -88,21 +87,21 @@ const shutdown = (sleepMin) => {
 
 module.exports.shutdown = shutdown;
 
-module.exports.shotAndSendPhoto = () => {
-  if (videoStream) {
-    exec(`dd if=/dev/video0 of=/tmpvid/cam/${idDev}.jpg bs=11M count=1 && scp /tmpvid/cam/${idDev}.jpg pi@geoworks.pro:/home/pi/camphotos/${idDev}.jpg.tmp && ssh pi@geoworks.pro 'rm /home/pi/camphotos/${idDev}.jpg;mv /home/pi/camphotos/${idDev}.jpg.tmp /home/pi/camphotos/${idDev}.jpg';rm /tmpvid/cam/${idDev}.jpg`);
-  } else if (!noShot && !noSleep) {
+module.exports.shotAndSendPhoto = (callback) => {
+  if (!noShot && !noSleep) {
     noSleep = true;
     exec(`raspistill -w 640 -h 480 -q 50 -o /tmpvid/cam/${idDev}.jpg && scp /tmpvid/cam/${idDev}.jpg pi@geoworks.pro:/home/pi/camphotos/${idDev}.jpg.tmp && ssh pi@geoworks.pro 'rm /home/pi/camphotos/${idDev}.jpg;mv /home/pi/camphotos/${idDev}.jpg.tmp /home/pi/camphotos/${idDev}.jpg';rm /tmpvid/cam/${idDev}.jpg`, () => {
       noSleep = false;
+      callback();
     });
+  } else {
+    callback(true);
   }
 }
 
 module.exports.startStream = () => {
   if (!noShot && !noSleep) {
     noSleep = true;
-    videoStream = true;
     exec(`uv4l -nopreview --auto-video_nr --driver raspicam --encoding mjpeg --width 640 --height 480 --framerate 5`);
   }
 }
@@ -111,7 +110,6 @@ module.exports.stopStream = () => {
   if (noSleep) {
     exec(`sudo pkill uv4l`, () => {
       noSleep = false;
-      videoStream = false;
     });
   }
 }

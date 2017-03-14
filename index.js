@@ -16,12 +16,14 @@ setInterval(() => {
       sender(values);
     }
   });
-  setTimeout(() => {
-    hwComm.shotAndSendPhoto();
-  }, 5000);
 }, sensorsInterval);
 
-hwComm.startStream();
+setTimeout(() => {
+  hwComm.shotAndSendPhoto(() => {
+    if (err) { log('no take photo'); }
+    hwComm.startStream();
+  });
+}, 15000);
 
 setTimeout(() => {
   sender({ "type": "info", "event": "wakeup", "date": new Date((new Date).valueOf() - 25000).toISOString() });
