@@ -19,7 +19,7 @@ setInterval(() => {
 }, sensorsInterval);
 
 setTimeout(() => {
-  hwComm.shotAndSendPhoto(() => {
+  hwComm.shotAndSendPhoto((err) => {
     if (err) { log('no take photo'); }
     hwComm.startStream();
   });
