@@ -49,10 +49,10 @@ const final = () => {
   //testing
   let currentSleepTime = 1;
   const rnd = Math.random();
-  if (rnd > 0.9) { currentSleepTime = 5 * 60; }
-  else if (rnd > 0.8) { currentSleepTime = 2 * 60; }
-  else if (rnd > 0.7) { currentSleepTime = 60; }
-  else if (rnd > 0.01) { currentSleepTime = rnd * 100; }
+  if (rnd > 0.9) { currentSleepTime = 5 * 60; } else
+  if (rnd > 0.8) { currentSleepTime = 2 * 60; } else
+  if (rnd > 0.7) { currentSleepTime = 60; } else
+  if (rnd > 0.01) { currentSleepTime = rnd * 100; }
   /*const lifeAllTime = (new Date(powerParams.lifeToTime) - new Date()) / 60000;
   if(lifeAllTime > 0) {
     currentSleepTime = Math.round((lifeAllTime * powerParams.costQuant) / voltToCharge(currentVolt));
