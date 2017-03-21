@@ -77,6 +77,7 @@ const final = () => {
         currentSleepTime = Math.round((wakeUpTime - new Date()) / 60000);
       }*/
       sender({ "type": "info", "event": "sleep", "time": currentSleepTime, /*initTimeSleep,*/ "cost": powerParams.costQuant.toFixed(4), "date": (new Date).toISOString() });
+      hwComm.stopStream();
       setTimeout(() => {
         hwComm.shutdown(currentSleepTime);
       }, 5000);/*
