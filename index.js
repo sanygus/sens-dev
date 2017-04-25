@@ -27,4 +27,9 @@ setTimeout(() => {
 
 setTimeout(() => {
   sender({ "type": "info", "event": "wakeup", "date": new Date((new Date).valueOf() - 25000).toISOString() });
+  hwComm.getSleepStat((err, stat) => {
+    if (err) { log(`getStatError ${err}`); } else {
+      sender({ "type": "info", "event": "stat", "data": stat, "date": new Date((new Date).valueOf() - 25000).toISOString() });
+    }
+  });
 }, 25000);

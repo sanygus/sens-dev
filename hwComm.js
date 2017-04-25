@@ -36,6 +36,23 @@ module.exports.sensRead = (callback) => {
   });
 }
 
+module.exports.getSleepStat = (callback) => {
+  exec(`python3 ${hwPath}/ardGetStat.py`, (error, stdout, stderr) => {
+    if (error) {
+      return callback(error);
+    }
+    if (stderr) {
+      return callback(new Error(stderr));
+    }
+    const stat = JSON.parse(stdout);
+    if (stat.error) {
+      sender({ "type": "info", "event": "warn", "message": `getStatError ${stat.error}`, "date": (new Date).toISOString() });
+      return callback(stat.error);
+    }
+    callback(null, stat);
+  });
+}
+
 const sigSleep = (time, callback) => {
   if (time > 0) {
     exec(`python3 ${hwPath}/ardsleep.py ${time}`, (error, stdout, stderr) => {
