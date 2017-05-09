@@ -2,6 +2,7 @@ const http = require('http');
 const options = require('./options');
 const dataKeeper = require('./dataKeeper');
 const log = require('./log');
+const buffer = [];
 
 const sendToServer = (values, callback) => {//values in JSON { par1: 'value' }
   let getQuery = `iddev=${options.idDev}&`;
@@ -72,3 +73,19 @@ const send = (values, fromFile = 0) => {
 }
 
 module.exports = send;
+
+module.exports.addToBuffer = (data) => {
+  buffer.push(data);
+}
+
+module.exports.sendBuffer = () => {
+  //API
+}
+
+module.exports.sendTaskConfig = (config) => {
+  //API
+}
+
+module.exports.getTasks = () => {
+  //API
+}

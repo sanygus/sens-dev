@@ -7,6 +7,8 @@ let powerParams = {};
 let currentVolt = null;
 let startVolt = null;
 let startMeasure = true;
+let workTime = powerOptions.defaultWorkTime;
+let finalTimer = null;
 
 const init = () => {
   fs.readFile(fileName, (err, data) => {
@@ -53,7 +55,7 @@ const final = () => {
   if (rnd > 0.8) { currentSleepTime = 2 * 60; } else
   if (rnd > 0.7) { currentSleepTime = 60; } else
   if (rnd > 0.01) { currentSleepTime = rnd * 100; }
-  /*const lifeAllTime = (new Date(powerParams.lifeToTime) - new Date()) / 60000;
+  const lifeAllTime = (new Date(powerParams.lifeToTime) - new Date()) / 60000;
   if(lifeAllTime > 0) {
     currentSleepTime = Math.round((lifeAllTime * powerParams.costQuant) / voltToCharge(currentVolt));
     if (currentSleepTime > 1) {
@@ -75,19 +77,19 @@ const final = () => {
         }
         wakeUpTime.setTime(wakeUpTime.getTime() - 300000);
         currentSleepTime = Math.round((wakeUpTime - new Date()) / 60000);
-      }*/
-      sender({ "type": "info", "event": "sleep", "time": currentSleepTime, /*initTimeSleep,*/ "cost": powerParams.costQuant.toFixed(4), "date": (new Date).toISOString() });
+      }
+      sender({ "type": "info", "event": "sleep", "time": currentSleepTime, initTimeSleep, "cost": powerParams.costQuant.toFixed(4), "date": (new Date).toISOString() });
       hwComm.stopStream();
       setTimeout(() => {
         hwComm.shutdown(currentSleepTime);
-      }, 5000);/*
+      }, 5000);
     } else {
       sender({ "type": "info", "event": "notice", "message": "sleep time small, no sleep", "lifeAllTime": lifeAllTime, "date": (new Date).toISOString() });
       startMeasure = true;
     }
   } else {
     sender({ "type": "info", "event": "warn", "message": "life to time gone", "lifeToTime": powerParams.lifeToTime, "date": (new Date).toISOString() });
-  }*/
+  }
 }
 
 init();
@@ -97,9 +99,10 @@ module.exports.addVolt = (volt) => {
     if (startMeasure) {
       startVolt = volt;
       startMeasure = false;
-      setTimeout(() => {
+      //workTime = 
+      finalTimer = setTimeout(() => {
         final();
-      }, powerOptions.workTime);
+      }, workTime * 60000);
     } else {
       currentVolt = volt;
     }
@@ -107,3 +110,13 @@ module.exports.addVolt = (volt) => {
 }
 
 module.exports.voltToCharge = voltToCharge;
+
+module.exports.workTime = workTime;
+
+module.exports.correctWorkTime = (wt) => {
+  clearTimeout(finalTimer);
+  workTime = wt;
+  finalTimer = setTimeout(() => {
+    final();
+  }, workTime * 60000);
+}

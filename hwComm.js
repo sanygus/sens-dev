@@ -2,11 +2,12 @@ const { hwPath, idDev } = require('./options');
 const exec = require('child_process').exec;
 const sender = require('./sender');
 const log = require('./log');
+const { taskConfig, taskParams } = require('./taskConfig');
 
 let noSleep = false;
 let noShot = false;
 
-module.exports.sensRead = (callback) => {
+module.exports.sensRead = (task, callback) => {
   exec(`python3 ${hwPath}/ardsens.py`, (error, stdout, stderr) => {
     if (error) {
       return callback(error);
@@ -32,7 +33,10 @@ module.exports.sensRead = (callback) => {
     if (sensors.volt || sensors.mic || sensors.press) {
       sensors.date = (new Date).toISOString();
     }
-    callback(sensErr, sensors);
+    //sens to buffer
+    sender.pushToBuffer(sensors);
+    callback(sensErr, task);
+    //callback(sensErr, sensors);
   });
 }
 
@@ -116,17 +120,36 @@ module.exports.shotAndSendPhoto = (callback) => {
   }
 }
 
-module.exports.startStream = () => {
+module.exports.startStream = (duration) => {
   if (!noShot && !noSleep) {
     noSleep = true;
     exec(`uv4l -nopreview --auto-video_nr --driver raspicam --encoding mjpeg --width 640 --height 480 --framerate 5`);
+    if (duration) {
+      setTimeout(() => {
+        stopStream();
+      }, duration);
+    }
   }
 }
 
-module.exports.stopStream = () => {
+const stopStream = () => {
   if (noSleep) {
     exec(`sudo pkill uv4l`, () => {
       noSleep = false;
     });
   }
+}
+
+module.exports.stopStream = stopStream;
+
+module.exports.getAndSendTaskConfig = (callback) => {
+  const newConfig = {};
+  for(taskKey in taskConfig) {
+    newConfig.taskKey = taskConfig.taskKey;
+    newConfig.taskKey.params = taskConfig.taskKey.params.map((id) => {
+      return taskParams.id;
+    });
+  }
+  sender.pushToBuffer(newConfig);
+  callback(true);
 }

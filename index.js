@@ -16,7 +16,7 @@ setInterval(() => {
       sender(values);
     }
   });
-}, sensorsInterval);
+}, sensorsInterval * 60000);
 
 setTimeout(() => {
   hwComm.shotAndSendPhoto((err) => {
