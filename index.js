@@ -32,4 +32,4 @@ setTimeout(() => {
       sender({ "type": "info", "event": "stat", "data": JSON.stringify(stat), "date": new Date((new Date).valueOf() - 25000).toISOString() });
     }
   });
-}, 20000);
+}, 30000);
