@@ -2,7 +2,7 @@ module.exports.taskConfig = {
 	1: {
 		name: 'считать и отправить показания датчиков',
 		exec: 'sensRead',
-		cost: 0.05,
+		cost: 0.7,
 		params: [ 0 ],
 	},
 	2: {

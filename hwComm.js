@@ -7,7 +7,7 @@ const { taskConfig, taskParams } = require('./taskConfig');
 let noSleep = false;
 let noShot = false;
 
-module.exports.sensRead = (task, callback) => {
+module.exports.sensRead = (callback) => {
   exec(`python3 ${hwPath}/ardsens.py`, (error, stdout, stderr) => {
     if (error) {
       return callback(error);
@@ -33,9 +33,6 @@ module.exports.sensRead = (task, callback) => {
     if (sensors.volt || sensors.mic || sensors.press) {
       sensors.date = (new Date).toISOString();
     }
-    //sens to buffer
-    //sender.pushToBuffer(sensors);
-    //callback(sensErr, task);
     callback(sensErr, sensors);
   });
 }

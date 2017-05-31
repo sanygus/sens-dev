@@ -114,7 +114,7 @@ module.exports.voltToCharge = voltToCharge;
 
 module.exports.workTime = workTime;
 
-module.exports.startVolt = startVolt;
+module.exports.startVolt = 1000;
 
 module.exports.final = final;
 

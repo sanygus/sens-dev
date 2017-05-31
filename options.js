@@ -9,7 +9,7 @@ module.exports = {
   },
   dataKeeperFile: 'tmpsensors.db',
   powerManagerFile: 'powerParams.dat',
-  activeTasksFile: 'activaTasks.dat',
+  activeTasksFile: 'activeTasks.dat',
   power: {
     defaultWorkTime: 3,
     maxCharge: 1023,
