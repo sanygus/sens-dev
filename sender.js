@@ -86,6 +86,10 @@ module.exports.sendTaskConfig = (config) => {
   //API
 }
 
+module.exports.sendSessionSchedule = (sessionSchedule) => {
+  //API
+}
+
 module.exports.getTasks = () => {
   //API
 }

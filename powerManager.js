@@ -47,14 +47,15 @@ const final = () => {
   } else {
     powerParams.costQuant = 0.0015;
   }
+  powerParams.lastCharge = voltToCharge(currentVolt);
   fs.writeFile(fileName, JSON.stringify(powerParams), log);
   //testing
-  let currentSleepTime = 1;
+  /*let currentSleepTime = 1;
   const rnd = Math.random();
   if (rnd > 0.9) { currentSleepTime = 5 * 60; } else
   if (rnd > 0.8) { currentSleepTime = 2 * 60; } else
   if (rnd > 0.7) { currentSleepTime = 60; } else
-  if (rnd > 0.01) { currentSleepTime = rnd * 100; }
+  if (rnd > 0.01) { currentSleepTime = rnd * 100; }*/
   const lifeAllTime = (new Date(powerParams.lifeToTime) - new Date()) / 60000;
   if(lifeAllTime > 0) {
     currentSleepTime = Math.round((lifeAllTime * powerParams.costQuant) / voltToCharge(currentVolt));
@@ -100,9 +101,9 @@ module.exports.addVolt = (volt) => {
       startVolt = volt;
       startMeasure = false;
       //workTime = 
-      finalTimer = setTimeout(() => {
+      /*finalTimer = setTimeout(() => {
         final();
-      }, workTime * 60000);
+      }, workTime * 60000);*/
     } else {
       currentVolt = volt;
     }
@@ -113,10 +114,16 @@ module.exports.voltToCharge = voltToCharge;
 
 module.exports.workTime = workTime;
 
+module.exports.startVolt = startVolt;
+
+module.exports.final = final;
+
+module.exports.getPowerParams = () => { callback(powerParams); };
+
 module.exports.correctWorkTime = (wt) => {
   clearTimeout(finalTimer);
   workTime = wt;
-  finalTimer = setTimeout(() => {
+  /*finalTimer = setTimeout(() => {
     final();
-  }, workTime * 60000);
+  }, workTime * 60000);*/
 }

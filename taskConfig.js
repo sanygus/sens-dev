@@ -4,14 +4,12 @@ module.exports.taskConfig = {
 		exec: 'sensRead',
 		cost: 0.05,
 		params: [ 0 ],
-		sending: 1,
 	},
 	2: {
 		name: 'собрать и отправить статистику сна',
 		exec: 'getSleepStat',
 		cost: 0.02,
 		params: [],
-		sending: 1,
 	},
 	3: {
 		name: 'заснуть',
@@ -24,7 +22,6 @@ module.exports.taskConfig = {
 		exec: 'shotAndSendPhoto',
 		cost: 0.1,
 		params: [ 0 ],
-		sending: 1,
 	},
 	5: {
 		name: 'видео поток',
@@ -37,8 +34,14 @@ module.exports.taskConfig = {
 		exec: '',
 		cost: 0.1,
 		params: [ 0 ],
-		sending: 1,
-	}
+	},
+	7: {
+		name: 'загрузить задания с сервера',
+		exec: '',
+		cost: 0.1,
+		params: [ 0 ],
+	},
+
 }
 module.exports.taskParams = {
 	0: {

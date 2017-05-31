@@ -34,9 +34,9 @@ module.exports.sensRead = (task, callback) => {
       sensors.date = (new Date).toISOString();
     }
     //sens to buffer
-    sender.pushToBuffer(sensors);
-    callback(sensErr, task);
-    //callback(sensErr, sensors);
+    //sender.pushToBuffer(sensors);
+    //callback(sensErr, task);
+    callback(sensErr, sensors);
   });
 }
 
