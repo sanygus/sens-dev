@@ -25,6 +25,12 @@ setTimeout(() => {
   });
 }, 15000);
 
+setInterval(() => {
+  hwComm.shotAndSendPhoto((err) => {
+    if (err) { log('no take photo'); }
+  });
+}, 1200000);
+
 setTimeout(() => {
   sender({ "type": "info", "event": "wakeup", "date": new Date((new Date).valueOf() - 25000).toISOString() });
   hwComm.getSleepStat((err, stat) => {

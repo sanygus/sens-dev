@@ -118,7 +118,7 @@ module.exports.shotAndSendPhoto = (callback) => {
 
 module.exports.startStream = () => {
   if (!noShot && !noSleep) {
-    noSleep = true;
+    //noSleep = true;
     exec(`uv4l -nopreview --auto-video_nr --driver raspicam --encoding mjpeg --width 640 --height 480 --framerate 5`);
   }
 }
