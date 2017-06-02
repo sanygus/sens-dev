@@ -1,11 +1,11 @@
-const { taskConfig, taskParams } = require('./taskConfig');
+const fs = require('fs');
+const hwComm = require('./hwComm');
+const sender = require('./sender');
 const { power, activeTasksFile } = require('./options');
+const { taskConfig, taskParams } = require('./taskConfig');
 const powerManager = require('./powerManager');
 const startVolt = powerManager.voltToCharge(powerManager.startVolt);
 const minWorkCharge = powerManager.voltToCharge(power.minWorkCharge);
-const sender = require('./sender');
-const hwComm = require('./hwComm');
-const fs = require('fs');
 
 const sessionSchedule = [];
 
