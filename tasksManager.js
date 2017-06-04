@@ -1,6 +1,7 @@
 const fs = require('fs');
 const hwComm = require('./hwComm');
 const sender = require('./sender');
+const log = require('./log');
 const { power, activeTasksFile } = require('./options');
 const { taskConfig, taskParams } = require('./taskConfig');
 const powerManager = require('./powerManager');
