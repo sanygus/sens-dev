@@ -58,24 +58,27 @@ module.exports.schedule = schedule;
 
 const doSchedule = (schedule) => {
 	console.log(schedule);
-	/*const queueCount = 0;
+	let queueCount = 0;
 	//положить распиание в жрунал
 	schedule.forEach((task) => {
+		queueCount++;
+	  console.log(taskConfig[task.taskID].exec + 'start');
 		//task.startTime = new Date();
-		hwComm[taskConfig[task.taskID].exec](task, (err, task, result) => {
+		hwComm[taskConfig[task.taskID].exec](task.params, (err, result) => {
+			console.log(taskConfig[task.taskID].exec + 'execed');
 			if (err) {
-				task.error = err;
+				log('error in exec task' + err);
 			}/* else {
 				task.endTime = new Date();
 			}*/
 			//положить (время нач/конец, вольтаж нач/конец, ошибки)
-			/*queueCount--;
-			if (result)	{ sender.sendResult(result); }
+			queueCount--;
+			if (result)	{ /*sender.sendResult(result);*/ }
 			if (queueCount === 0) {
 				//отправить отчёт
 				powerManager.final();
+				console.log('end');
 			}
 		});
-		queueCount++;
-	});*/
+	});
 }

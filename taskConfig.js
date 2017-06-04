@@ -13,7 +13,7 @@ module.exports.taskConfig = {
 	},
 	3: {
 		name: 'заснуть',
-		exec: 'shutdown',
+		exec: 'goShutdown',
 		cost: 0.02,
 		params: [ 0, 1 ]
 	},

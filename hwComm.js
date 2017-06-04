@@ -7,7 +7,7 @@ const { taskConfig, taskParams } = require('./taskConfig');
 let noSleep = false;
 let noShot = false;
 
-module.exports.sensRead = (callback) => {
+module.exports.sensRead = (params, callback) => {
   exec(`python3 ${hwPath}/ardsens.py`, (error, stdout, stderr) => {
     if (error) {
       return callback(error);
@@ -37,7 +37,7 @@ module.exports.sensRead = (callback) => {
   });
 }
 
-module.exports.getSleepStat = (callback) => {
+module.exports.getSleepStat = (params, callback) => {
   exec(`python3 ${hwPath}/ardGetStat.py`, (error, stdout, stderr) => {
     if (error) {
       return callback(error);
@@ -105,7 +105,18 @@ const shutdown = (sleepMin) => {
 
 module.exports.shutdown = shutdown;
 
-module.exports.shotAndSendPhoto = (callback) => {
+module.exports.goShutdown = (params, callback) => {
+  let sleepMin = 1;
+  if (params[2] !== undefined) {
+    sleepMin = params[2];
+  } else {
+    sleepMin = taskParams[2].default;
+  }
+  shutdown(sleepMin);
+  callback(null);
+}
+
+module.exports.shotAndSendPhoto = (params, callback) => {
   if (!noShot && !noSleep) {
     noSleep = true;
     exec(`raspistill -w 320 -h 240 -q 50 -o /tmpvid/cam/${idDev}.jpg && scp /tmpvid/cam/${idDev}.jpg pi@geoworks.pro:/home/pi/camphotos/${idDev}.jpg.tmp && ssh pi@geoworks.pro 'rm /home/pi/camphotos/${idDev}.jpg;mv /home/pi/camphotos/${idDev}.jpg.tmp /home/pi/camphotos/${idDev}.jpg';rm /tmpvid/cam/${idDev}.jpg`, () => {
@@ -119,9 +130,9 @@ module.exports.shotAndSendPhoto = (callback) => {
 
 module.exports.startStream = (duration) => {
   if (!noShot && !noSleep) {
-    noSleep = true;
     exec(`uv4l -nopreview --auto-video_nr --driver raspicam --encoding mjpeg --width 640 --height 480 --framerate 5`);
     if (duration) {
+      noSleep = true;
       setTimeout(() => {
         stopStream();
       }, duration);
